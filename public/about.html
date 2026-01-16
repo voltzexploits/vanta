@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Vanta Project</title>
+<link rel="icon" href="/favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* ===== Reset & Base ===== */
+  *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+  html, body {
+    width: 100%; height: 100%;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #0b0b1c, #0f1f7a, #2152fe);
+    color: #fff;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  a { text-decoration: none; color: inherit; }
+
+  /* ===== Loader ===== */
+  #loader {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(180deg, #000, #1e4fff);
+    z-index: 9999;
+    transition: opacity 0.6s ease;
+  }
+  .loader-content {
+    display: flex; flex-direction: column; align-items: center; gap: 1.5rem; text-align: center;
+  }
+  .loader-logo { height: 14vh; max-height: 100px; animation: pulse 1.5s infinite alternate; }
+  @keyframes pulse { 0% {transform:scale(1); opacity:1;} 100% {transform:scale(1.05);opacity:0.85;} }
+  .progress-container { width: 260px; max-width: 80vw; height: 6px; background: rgba(255,255,255,0.15); border-radius: 8px; overflow: hidden; }
+  .progress-bar { height: 100%; width: 0%; background: #ffffff; border-radius: 8px; transition: width 0.25s ease-out; }
+  .percent { font-size: 0.85rem; opacity:0.7; font-weight:500; }
+
+  /* ===== Main Card ===== */
+  header { margin: 40px 0 20px; text-align: center; }
+  header h1 { font-size: 2.5rem; font-weight:500; letter-spacing:1px; text-shadow:0 0 12px rgba(0,0,0,0.4); }
+
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 650px;
+    padding: 0 15px 60px;
+  }
+
+  .about-card {
+    width: 100%;
+    background: rgba(0,0,0,0.12);
+    border-radius: 16px;
+    padding: 35px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    box-shadow: 0 6px 30px rgba(0,0,0,0.35);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .about-card:hover { transform: translateY(-3px); box-shadow: 0 12px 35px rgba(0,0,0,0.45); }
+
+  .about-card h2 {
+    font-size: 1.9rem;
+    font-weight:500;
+    letter-spacing: 0.5px;
+    color: #00f0ff;
+  }
+  .about-card p {
+    font-size: 1rem;
+    line-height: 1.7;
+    opacity:0.85;
+    letter-spacing:0.25px;
+  }
+
+  .back-btn {
+    align-self: center;
+    margin-top: 1rem;
+    padding: 0.6rem 2.2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.2);
+    text-decoration: none;
+    color: #fff;
+    transition: all 0.3s ease;
+  }
+  .back-btn:hover {
+    background: rgba(0,0,0,0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.4);
+  }
+
+  .footer { margin: 40px 0 20px; font-size: 0.875rem; opacity: 0.5; text-align: center; }
+</style>
+</head>
+
+<body>
+
+<!-- Loader -->
+<div id="loader">
+  <div class="loader-content">
+    <img src="sj.png" alt="Vanta Logo" class="loader-logo">
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <div class="percent" id="percent">0%</div>
+  </div>
+</div>
+
+<header>
+  <h1>About Vanta</h1>
+</header>
+
+<main>
+  <div class="about-card">
+    <p>
+      Vanta… I don’t really have much to say about this project. I was thinking about school, and suddenly the idea of proxies popped into my mind. I remembered the name and logo from a failed project back in mid-2025, and I decided to continue its legacy in a new way!
+    </p>
+    <p>
+      This project was fully developed by me, Exvinixty. Some of my friends who have played games with me in the past may know me. If you do, please feel free to give suggestions on what I should add to this still-underdeveloped proxy.
+    </p>
+        <p>
+      This project belongs to me (Exvinixty), so please don’t claim it as your own.
+    </p>
+  </div>
+</main>
+
+    <a href="index.html" class="back-btn">Back</a>
+  </div>
+</main>
+
+
+<footer class="footer">
+  &copy; 2026 Vanta
+</footer>
+
+<script>
+/* ===== Loader Animation ===== */
+let progress = 0;
+const bar = document.getElementById("progress-bar");
+const percent = document.getElementById("percent");
+const loader = document.getElementById("loader");
+
+function ease(current, target, speed = 0.05){ return current + (target-current)*speed; }
+
+let targetProgress = 0;
+const tick = setInterval(()=>{
+  if(targetProgress<100) targetProgress += Math.random()*2;
+  progress = ease(progress,targetProgress);
+  if(progress>100) progress = 100;
+  bar.style.width = progress+"%";
+  percent.textContent = Math.floor(progress)+"%";
+  if(progress>=99.9){
+    clearInterval(tick);
+    setTimeout(()=>{ loader.style.opacity="0"; setTimeout(()=>loader.remove(),600); },250);
+  }
+},20);
+</script>
+
+</body>
+</html>

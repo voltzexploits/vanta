@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vanta | Error 404</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* ===== Reset & Base ===== */
+  *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+  html, body {
+    width: 100%; height: 100%;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #0b0b1c, #0f1f7a, #2152fe);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  a { text-decoration: none; color: inherit; }
+
+  /* ===== Main Content ===== */
+  h1 {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px rgba(0,0,0,0.6);
+  }
+  p {
+    font-size: 1.25rem;
+    opacity: 0.85;
+    margin-bottom: 2rem;
+    max-width: 500px;
+  }
+  .btn-home {
+    display: inline-block;
+    padding: 0.75rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: all 0.3s ease;
+  }
+  .btn-home:hover {
+    background: rgba(0,0,0,0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  }
+
+  footer {
+    margin-top: 4rem;
+    font-size: 0.875rem;
+    opacity: 0.6;
+  }
+  footer a {
+    color: #00f0ff;
+    text-decoration: none;
+    margin-right: 10px;
+  }
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+
+<body>
+  <h1>404 – Page Not Found</h1>
+  <p>You might have typed the URL wrong, or the page doesn’t exist. Don’t worry, it happens!</p>
+  <a href="index.html" class="btn-home">Back to Dashboard</a>
+
+  <footer>
+    <span>Vanta &copy; MW 2026</span>
+  </footer>
+</body>
+</html>

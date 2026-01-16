@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vanta Startup</title>
+<meta name="description" content="Vanta Startup Dashboard">
+<link rel="icon" href="/favicon.ico">
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* ===== Reset & Base ===== */
+  *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+  html, body {
+    width: 100%; height: 100%;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #0b0b1c, #0f1f7a, #2152fe);
+    color: #fff;
+    overflow-x: hidden;
+  }
+  img { display: block; max-width: 100%; height: auto; }
+  a { text-decoration: none; color: inherit; }
+  button { cursor: pointer; border: none; background: none; }
+
+  /* ===== Loader ===== */
+  #loader {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(180deg, #000, #1e4fff);
+    z-index: 9999;
+    transition: opacity 0.6s ease;
+  }
+  .loader-content {
+    display: flex; flex-direction: column; align-items: center; gap: 1.5rem;
+    text-align: center;
+  }
+  .loader-logo {
+    height: 18vh; max-height: 120px;
+    animation: pulse 1.5s infinite alternate;
+  }
+  @keyframes pulse { 
+    0% { transform: scale(1); opacity:1; } 
+    100% { transform: scale(1.08); opacity:0.85; } 
+  }
+  .progress-container {
+    width: 280px; max-width: 80vw; height: 6px; 
+    background: rgba(255,255,255,0.15); border-radius: 12px; overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%; width: 0; 
+    background: #ffffff;
+    border-radius: 12px; 
+    transition: width 0.25s ease-out;
+  }
+  .percent { font-size: 0.85rem; opacity:0.7; font-weight:500; }
+
+  /* ===== BETA Banner ===== */
+  #beta-banner {
+    position: fixed;
+    top: -120px; /* hidden initially */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%;
+    max-width: 700px;
+    background: #ff3b3b;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    border-radius: 14px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 10000;
+    transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+  }
+  #beta-banner.show {
+    top: 20px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  #beta-banner .text {
+    display: flex; flex-direction: column; align-items: flex-start;
+  }
+  #beta-banner strong { font-size: 1.4rem; letter-spacing: 1px; }
+  #beta-banner small { font-size: 0.85rem; opacity: 0.85; margin-top: 2px; }
+  #beta-banner .close-btn {
+    cursor: pointer;
+    font-size: 1.5rem;
+    line-height: 1;
+    padding: 0 6px;
+    opacity: 0.85;
+    transition: opacity 0.3s ease;
+  }
+  #beta-banner .close-btn:hover { opacity: 1; }
+
+  /* ===== Dashboard ===== */
+  #startup {
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 100vh; width: 100%; padding: 3rem; text-align: center;
+    transition: opacity 0.6s ease;
+  }
+  .startup-logo { height: 18vh; max-height: 120px; margin-bottom: 1.5rem; animation: pulse 1.5s infinite alternate; }
+  .startup-title { 
+    font-size: 2.5rem; letter-spacing: 2px; margin-bottom: 3rem; 
+    text-shadow: 0 0 15px rgba(0,0,0,0.5); 
+    font-weight: 500;
+  }
+  .icon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 2rem;
+    width: 100%;
+    max-width: 700px;
+  }
+  .icon-card {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 1.5rem; border-radius: 18px;
+    background: rgba(0,0,0,0.1);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(6px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+  .icon-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+  }
+  .icon-img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1rem;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+  .icon-card:hover .icon-img { transform: scale(1.05); }
+  .icon-card span { font-size: 1rem; font-weight:500; opacity:0.9; }
+
+  /* ===== About Button Strip ===== */
+  .button-strip {
+    margin-top: 2.5rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .about-btn {
+    display: inline-block;
+    padding: 0.75rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    color: #fff;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  .about-btn:hover {
+    background: rgba(0,0,0,0.35);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    transform: translateY(-2px);
+  }
+
+  .footer { margin-top: 4rem; font-size:0.875rem; opacity:0.5; }
+</style>
+</head>
+
+<body>
+
+  <!-- Loader -->
+  <div id="loader" role="status" aria-live="polite">
+    <div class="loader-content">
+      <img src="sj.png" alt="Vanta Logo" class="loader-logo">
+      <div class="progress-container" aria-label="Loading progress">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+      <div class="percent" id="percent">0%</div>
+    </div>
+  </div>
+
+  <!-- BETA Banner -->
+  <div id="beta-banner">
+    <div class="text">
+      <strong>WARNING</strong>
+      <small>This project is currently in beta, things might not work as you expect them to.</small>
+    </div>
+    <div class="close-btn" onclick="closeBetaBanner()">×</div>
+  </div>
+
+  <!-- Startup Dashboard -->
+  <main id="startup">
+    <img src="sj.png" alt="Vanta Logo" class="startup-logo">
+    <h1 class="startup-title">Welcome to Vanta</h1>
+
+    <section class="icon-grid">
+      <a href="proxy.html" class="icon-card" aria-label="Proxy Dashboard">
+        <img src="https://i.postimg.cc/52SBP8f4/globe.png" alt="Proxy Icon" class="icon-img">
+        <span>Proxy</span>
+      </a>
+      <a href="settings.html" class="icon-card" aria-label="Settings Dashboard">
+        <img src="https://i.postimg.cc/nhJKY3b6/settings.png" alt="Settings Icon" class="icon-img">
+        <span>Settings</span>
+      </a>
+    </section>
+
+    <!-- About Button Strip -->
+    <div class="button-strip">
+      <a href="about.html" class="about-btn">About This Project</a>
+    </div>
+
+    <footer class="footer">&copy; 2026 Vanta</footer>
+  </main>
+
+<script>
+  function showBetaBanner() {
+    const banner = document.getElementById('beta-banner');
+    banner.classList.add('show');
+  }
+
+  function closeBetaBanner() {
+    const banner = document.getElementById('beta-banner');
+    banner.style.top = '-120px';
+    banner.style.opacity = '0';
+    setTimeout(() => banner.style.display = 'none', 600);
+  }
+
+  // Loader + show startup + BETA banner
+  window.addEventListener('DOMContentLoaded', () => {
+    const loader = document.getElementById('loader');
+    const startup = document.getElementById('startup');
+    const progressBar = document.getElementById('progress-bar');
+    const percentLabel = document.getElementById('percent');
+
+    let progress = 0;
+    let target = 0;
+
+    const ease = (current, target, speed = 0.05) => current + (target - current) * speed;
+
+    const animate = () => {
+      if (target < 100) target += Math.random() * 2;
+      progress = ease(progress, target);
+      progress = Math.min(progress, 100);
+
+      progressBar.style.width = `${progress}%`;
+      percentLabel.textContent = `${Math.floor(progress)}%`;
+
+      if (progress >= 99.9) {
+        setTimeout(() => {
+          loader.style.opacity = '0';
+          setTimeout(() => {
+            loader.remove();
+            startup.style.display = 'flex';
+            startup.style.opacity = '1';
+            showBetaBanner(); // show banner after loading
+          }, 600);
+        }, 300);
+      } else {
+        requestAnimationFrame(animate);
+      }
+    };
+    requestAnimationFrame(animate);
+  });
+</script>
+
+</body>
+</html>
